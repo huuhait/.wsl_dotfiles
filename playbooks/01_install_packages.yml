@@ -1,0 +1,12 @@
+---
+- name: Install pacman packages
+  community.general.pacman:
+    name: neofetch
+  with_items:
+    - neofetch
+    - starship
+
+- name: Install paru
+  tasks:
+    - name: install paru
+      include: aur/pkg.yml pkg_name=paru
