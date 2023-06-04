@@ -1,0 +1,38 @@
+---
+- name: Setup zsh environment
+  hosts: localhost
+  connection: local
+  become: true
+  become_user: "huuhait"
+  tasks:
+    - name: Install pacman packages
+      community.general.pacman:
+        name: "{{ item }}"
+      become_user: "root"
+      loop:
+        - neofetch
+        - starship
+        - zsh
+        - btop
+        - htop
+
+    - name: change user shell to zsh
+      become: true
+      become_user: "root"
+      ansible.builtin.user:
+        name: "huuhait"
+        shell: /bin/zsh
+
+    - name: Fetch zap-zsh
+      ansible.builtin.uri:
+        url: https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh
+        return_content: true
+      register: zap_installer
+
+    - name: Run zap-zsh installer
+      ansible.builtin.shell:
+        cmd: zsh -s
+        stdin: "{{ zap_installer.content }}"
+
+    - name: Install dotfiles
+      include_tasks: dotfiles.yml

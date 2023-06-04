@@ -1,8 +1,0 @@
-- name: Copy dotfiles to home directory
-  copy:
-    src: "./{{ item }}"
-    dest: "/home/{{ owner }}"
-    mode: 0775
-  with_items:
-    - .config
-    - .zshenv
